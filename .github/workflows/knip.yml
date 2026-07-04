@@ -1,0 +1,33 @@
+# Dead-code / unused-dependency report (knip).
+#
+# Report-only: `continue-on-error: true` means a finding surfaces in the job log
+# but never fails the build. knip is deliberately not a hard gate here because it
+# flags code that is added but not yet wired up — noisy mid-development. The
+# template ships knip-clean, so to promote this to a hard gate, drop the
+# `continue-on-error` line below.
+name: Knip
+
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+
+jobs:
+  knip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Knip (report-only)
+        run: npm run lint:deps
+        continue-on-error: true
