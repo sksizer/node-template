@@ -65,6 +65,23 @@ can be enforced.
   CI runs it on every PR.
 - `prepublishOnly` builds `dist/` so a publish always ships fresh output.
 
+## Dependencies & supply chain
+
+- **Pin `devDependencies` to exact versions** (no `^`). With the committed
+  lockfile this makes a plain `npm install` reproduce the exact tree `npm ci`
+  would, and it closes the window where a fresh install could drift onto a newer,
+  possibly-compromised patch. Every version move then happens through a reviewed
+  Dependabot PR.
+- **Range runtime `dependencies` (`^x.y.z`), do not pin them.** This is a
+  *library* — exact-pinning its runtime deps forces version conflicts and
+  duplicate installs on consumers. Pin apps and dev tooling; range a library's
+  deps. (The template currently ships zero runtime dependencies.)
+- **Dependabot cooldown** delays adopting a just-published version until it has
+  been public for a few days (see `.github/dependabot.yml`), so a malicious
+  release has time to be caught before it reaches a PR. Together with the lockfile
+  and the `audit` gate, that's the supply-chain posture: pinned installs, delayed
+  adoption, advisory scanning.
+
 ## Scripts & gates
 
 Every gate is a plain `package.json` script, so what CI runs is exactly what you
@@ -83,5 +100,5 @@ can run locally.
 | `metrics` | scc code metrics (needs scc on PATH) | Code Metrics workflow (report-only) |
 
 Workflows: **CI** (core blocking gate), **Audit**, **Package Quality** (blocking),
-**Knip** and **Code Metrics** (report-only), plus **Dependabot** for weekly
-dependency and action updates.
+**Knip** and **Code Metrics** (report-only), plus **Dependabot** for monthly
+dependency and action updates (with a supply-chain cooldown).
