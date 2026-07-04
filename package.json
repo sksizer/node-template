@@ -34,6 +34,7 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "audit": "npm audit --audit-level=high",
+    "lint:deps": "knip",
     "lint:package": "publint",
     "check:types": "attw --pack . --profile esm-only",
     "package-check": "npm run build && npm run lint:package && npm run check:types",
@@ -44,6 +45,7 @@
     "@biomejs/biome": "^2.5.2",
     "@types/node": "^22.10.0",
     "@vitest/coverage-v8": "^4.1.9",
+    "knip": "^5.88.1",
     "publint": "^0.3.21",
     "typescript": "^5.7.2",
     "vitest": "^4.1.9"
