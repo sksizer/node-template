@@ -32,7 +32,8 @@
     "lint:fix": "biome check --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "audit": "npm audit --audit-level=high"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.2",
