@@ -42,13 +42,13 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.4",
-    "@biomejs/biome": "^2.5.2",
-    "@types/node": "^22.10.0",
-    "@vitest/coverage-v8": "^4.1.9",
-    "knip": "^5.88.1",
-    "publint": "^0.3.21",
-    "typescript": "^5.7.2",
-    "vitest": "^4.1.9"
+    "@arethetypeswrong/cli": "0.18.4",
+    "@biomejs/biome": "2.5.2",
+    "@types/node": "22.20.0",
+    "@vitest/coverage-v8": "4.1.9",
+    "knip": "5.88.1",
+    "publint": "0.3.21",
+    "typescript": "5.9.3",
+    "vitest": "4.1.9"
   }
 }
