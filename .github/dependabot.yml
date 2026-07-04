@@ -1,0 +1,36 @@
+# Dependabot (v2). Keeps the npm dependency tree and the workflow action pins
+# current on a weekly cadence. Routine minor/patch bumps are grouped so most weeks
+# land as a couple of PRs rather than one per package; major bumps stay ungrouped
+# (Dependabot's default) so each gets individual review.
+version: 2
+updates:
+  # JavaScript dependencies (package.json + package-lock.json).
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      # Batch dev-dependency minor + patch bumps into one PR.
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # Batch production minor + patch bumps into one PR. Major production bumps
+      # stay ungrouped for individual review.
+      production-minor-patch:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Action pins in .github/workflows/*.yml — all bumps batched into one PR.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
