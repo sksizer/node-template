@@ -35,6 +35,7 @@
     "coverage": "vitest run --coverage",
     "audit": "npm audit --audit-level=high",
     "lint:deps": "knip",
+    "metrics": "scc src",
     "lint:package": "publint",
     "check:types": "attw --pack . --profile esm-only",
     "package-check": "npm run build && npm run lint:package && npm run check:types",
