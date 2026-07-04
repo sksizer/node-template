@@ -1,0 +1,53 @@
+# The core gate. Runs on every pull request and every push to main, and turns the
+# local quality scripts (Biome, tsc, Vitest+coverage, build) into an enforced,
+# blocking check. If any step fails, the PR cannot merge.
+name: CI
+
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Node version comes from .nvmrc so local and CI resolve the same line.
+      # cache: npm keys the dependency cache on package-lock.json.
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # `npm ci` installs exactly the committed package-lock.json — reproducible,
+      # and fails if the lockfile is out of sync with package.json.
+      - name: Install dependencies
+        run: npm ci
+
+      # Biome: format + lint + import-organization in CI (no-write) mode.
+      - name: Lint & format check
+        run: npm run check:ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Vitest under v8 coverage — enforces the thresholds in vitest.config.ts and
+      # subsumes a bare test run.
+      - name: Test with coverage
+        run: npm run coverage
+
+      # Compile the publishable artifact; catches build-only breakage.
+      - name: Build
+        run: npm run build
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
