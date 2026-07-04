@@ -29,11 +29,16 @@
     "format:check": "biome format .",
     "check": "biome check .",
     "check:ci": "biome ci .",
-    "lint:fix": "biome check --write ."
+    "lint:fix": "biome check --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.2",
     "@types/node": "^22.10.0",
-    "typescript": "^5.7.2"
+    "@vitest/coverage-v8": "^4.1.9",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.9"
   }
 }
