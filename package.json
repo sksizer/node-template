@@ -23,9 +23,16 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "check": "biome check .",
+    "check:ci": "biome ci .",
+    "lint:fix": "biome check --write ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.2",
     "@types/node": "^22.10.0",
     "typescript": "^5.7.2"
   }
