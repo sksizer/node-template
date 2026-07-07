@@ -1,0 +1,49 @@
+# Dependabot (v2). Keeps the npm dependency tree and the workflow action pins
+# current on a monthly cadence. Routine minor/patch bumps are grouped so a month's
+# updates land as a couple of PRs rather than one per package; major bumps stay
+# ungrouped (Dependabot's default) so each gets individual review.
+#
+# Supply-chain cooldown: Dependabot will not propose a version until it has been
+# published for the cooldown window (7 days for most updates, 30 for majors). A
+# freshly-published — possibly compromised — release is therefore never adopted
+# immediately; it has time to be caught and yanked first. Granularity is days
+# (Dependabot's minimum). This complements the committed lockfile + `npm ci`
+# (which pin what actually installs) and the audit gate (known advisories).
+version: 2
+updates:
+  # JavaScript dependencies (package.json + package-lock.json).
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+    groups:
+      # Batch dev-dependency minor + patch bumps into one PR.
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # Batch production minor + patch bumps into one PR. Major production bumps
+      # stay ungrouped for individual review.
+      production-minor-patch:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Action pins in .github/workflows/*.yml — all bumps batched into one PR.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+    groups:
+      github-actions:
+        patterns:
+          - "*"

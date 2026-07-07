@@ -1,0 +1,50 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
+  // Respect .gitignore (node_modules, dist, coverage) so Biome never lints build
+  // output or dependencies.
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  // package-lock.json is committed but generated — keep Biome off it.
+  "files": {
+    "includes": ["**", "!**/dist", "!**/coverage", "!package-lock.json"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      // Per-function cognitive-complexity ceiling. Not part of Biome's
+      // recommended set, so it is opted into here at "error" to keep functions
+      // small. Biome's default ceiling is 15; raise `maxAllowedComplexity` if a
+      // codebase needs headroom, but treat a bump as a deliberate decision.
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": { "maxAllowedComplexity": 15 }
+        }
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  // Sort/organize imports as a source action on `biome check`.
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}
