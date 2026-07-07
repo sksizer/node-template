@@ -1,0 +1,60 @@
+# Code metrics report (scc — "Sloc, Cloc and Code").
+#
+# Report-only visibility: on every PR and push to main, runs scc over src/ and
+# writes a lines-of-code / comment / complexity table (plus a COCOMO estimate) to
+# the job's Step Summary, and uploads a per-file JSON report as an artifact. It
+# NEVER gates the build — no step asserts on any scc value.
+#
+# scc is a single Go binary (not an npm package), so there is no Node/install
+# step: the pinned release binary is downloaded straight from the scc release.
+# The version is pinned once, in SCC_VERSION, so the numbers are reproducible.
+name: Code Metrics
+
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  SCC_VERSION: v3.7.0
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Install the pinned scc release binary. The asset name carries no version
+      # (scc_Linux_x86_64.tar.gz); the tag in the URL is the pin.
+      - name: Install scc
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL "https://github.com/boyter/scc/releases/download/${SCC_VERSION}/scc_Linux_x86_64.tar.gz" \
+            | tar -xz -C "$HOME/.local/bin" scc
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      # Human-readable table into the Step Summary, fenced so it renders monospaced.
+      - name: Write metrics table to step summary
+        run: |
+          {
+            echo "### Code metrics — src (scc ${SCC_VERSION})"
+            echo ""
+            echo '```'
+            scc --ci src
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Machine-readable per-file report for diffing / automation later.
+      - name: Generate JSON metrics report
+        run: scc --format json --by-file -o scc-report.json src
+
+      - name: Upload metrics report
+        uses: actions/upload-artifact@v7
+        with:
+          name: code-metrics
+          path: scc-report.json
+          if-no-files-found: warn
