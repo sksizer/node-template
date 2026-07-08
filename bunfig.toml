@@ -1,0 +1,19 @@
+# Bun configuration. Only the test runner is configured; install behavior stays
+# default (bun.lock is the committed lockfile; CI installs with --frozen-lockfile).
+
+[test]
+# Unit tests are peer files under src/ (see CONVENTIONS.md "Tests").
+root = "src"
+
+# Coverage is opt-in via `bun run coverage` (= bun test --coverage); a plain
+# `bun test` stays fast. Thresholds are FLOORS that fail the run on a coverage
+# regression — set a notch under the real baseline, ratchet upward as it grows.
+# Bun reports function/line coverage (no branch coverage — see CONVENTIONS.md).
+coverageThreshold = { lines = 0.9, functions = 0.9, statements = 0.9 }
+
+# Test files themselves don't count toward coverage.
+coverageSkipTestFiles = true
+
+# text for humans, lcov for tooling/artifacts (written to coverage/).
+coverageReporter = ["text", "lcov"]
+coverageDir = "coverage"

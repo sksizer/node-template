@@ -7,12 +7,12 @@
 # published for the cooldown window (7 days for most updates, 30 for majors). A
 # freshly-published — possibly compromised — release is therefore never adopted
 # immediately; it has time to be caught and yanked first. Granularity is days
-# (Dependabot's minimum). This complements the committed lockfile + `npm ci`
+# (Dependabot's minimum). This complements the committed lockfile + `bun install --frozen-lockfile`
 # (which pin what actually installs) and the audit gate (known advisories).
 version: 2
 updates:
-  # JavaScript dependencies (package.json + package-lock.json).
-  - package-ecosystem: "npm"
+  # JavaScript dependencies (package.json + bun.lock).
+  - package-ecosystem: "bun"
     directory: "/"
     schedule:
       interval: "monthly"

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { greet } from "./greeting.js";
 
 // Peer unit test for greeting.ts. A peer test reads first as documentation of the
