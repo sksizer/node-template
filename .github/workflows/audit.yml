@@ -1,13 +1,13 @@
-# Dependency vulnerability audit. Scans the resolved tree (package-lock.json)
-# against the npm advisory database on every PR and push to main.
+# Dependency vulnerability audit. Scans the resolved tree (bun.lock) against the
+# npm advisory database on every PR and push to main.
 #
-# Threshold — HIGH: `npm audit --audit-level=high` fails only on a high or
+# Threshold — HIGH: `bun audit --audit-level=high` fails only on a high or
 # critical advisory; low/moderate are reported but non-blocking. A bare
-# `npm audit` fails on any advisory (down to low), so the flag sets the gate.
+# `bun audit` fails on any advisory (down to low), so the flag sets the gate.
 #
 # Kept in its own workflow (not a step in ci.yml) because it queries the advisory
-# DB over the network, unlike the offline build/test gate. No `npm ci` needed:
-# `npm audit` resolves straight from the committed lockfile.
+# DB over the network, unlike the offline build/test gate. No install needed:
+# `bun audit` resolves straight from the committed lockfile.
 name: Audit
 
 on:
@@ -22,10 +22,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Set up Node
-        uses: actions/setup-node@v6
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version-file: .nvmrc
+          bun-version-file: .bun-version
 
       - name: Audit dependencies
-        run: npm run audit
+        run: bun run audit

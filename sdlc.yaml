@@ -2,10 +2,11 @@
 # the full shape.
 
 quality_checks:
-  - npm run build
-  - npm run typecheck
+  - bun run build
+  - bun run typecheck
+  - bun test
 worktree_init:
-  - npm ci
+  - bun install --frozen-lockfile
 
 # worktree_init:
 #   - mise trust

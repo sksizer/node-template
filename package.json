@@ -6,7 +6,8 @@
   "license": "MIT",
   "author": "sksizer",
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "bun": ">=1.3"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +16,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [
@@ -30,25 +32,24 @@
     "check": "biome check .",
     "check:ci": "biome ci .",
     "lint:fix": "biome check --write .",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "coverage": "vitest run --coverage",
-    "audit": "npm audit --audit-level=high",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "coverage": "bun test --coverage",
+    "audit": "bun audit --audit-level=high",
     "lint:deps": "knip",
     "metrics": "scc src",
     "lint:package": "publint",
     "check:types": "attw --pack . --profile esm-only",
-    "package-check": "npm run build && npm run lint:package && npm run check:types",
-    "prepublishOnly": "npm run build"
+    "package-check": "bun run build && bun run lint:package && bun run check:types",
+    "prepublishOnly": "bun run build"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.4",
     "@biomejs/biome": "2.5.2",
+    "@types/bun": "1.3.4",
     "@types/node": "22.20.0",
-    "@vitest/coverage-v8": "4.1.9",
     "knip": "5.88.1",
     "publint": "0.3.21",
-    "typescript": "6.0.3",
-    "vitest": "4.1.9"
+    "typescript": "6.0.3"
   }
 }
